@@ -1,2 +1,3 @@
 # dominion-sim-api
-Collaborative project
+
+Collaborative project expanding from a [repl prototype](https://replit.com/@mpaulweeks/DominionSim)
