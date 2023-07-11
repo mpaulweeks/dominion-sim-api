@@ -1,5 +1,5 @@
 import { BasicCards, BaseSet, CardProperties, CardType, PlayerState } from "../types";
-import { Card } from "./card";
+import { Card, totalTreasure } from "./card";
 
 const simpleCards: CardProperties[] = [{
   id: BaseSet.Laboratory,
@@ -16,12 +16,13 @@ const simpleCards: CardProperties[] = [{
   cost: 2,
   types: [CardType.Action],
   onPlay: (player: PlayerState) => {
-    // const canTrashCopper = player.trashed.filter(c => c === BasicCards.Copper).length === 0;
+    // only trash while you can still afford a silver
+    const howManyCopperToTrash = totalTreasure(player) - 3;
     return {
       trashFromHand: [
         ...player.hand.filter(c => c === BasicCards.Curse),
         ...player.hand.filter(c => c === BasicCards.Estate),
-        // ...(canTrashCopper ? player.hand.filter(c => c === BasicCards.Copper) : []),
+        ...player.hand.filter(c => c === BasicCards.Copper).slice(howManyCopperToTrash),
       ].slice(0, 4),
     };
   },

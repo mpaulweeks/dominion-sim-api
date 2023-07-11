@@ -1,6 +1,6 @@
 import express from 'express';
-import { SimFunction, sim } from './engine';
-import { BigMoney, Chapel, ChapelLab, SmithyBigMoney, VillageSmithy } from './strategy';
+import { sim } from './engine';
+import { SampleStrategies } from './strategy/sample';
 
 const app = express();
 
@@ -17,16 +17,9 @@ function timerWrap<T>(cb: () => T): {
 }
 
 app.get('/', (req, res) => {
-  const sims: [string, SimFunction][] = [
-    ['bigMoney', BigMoney],
-    ['smithyBM', SmithyBigMoney],
-    ['villageSmithy', VillageSmithy],
-    ['chapel', Chapel],
-    ['chapelLab', ChapelLab],
-  ];
-  const data = timerWrap(() => sims.reduce((obj, tuple) => {
-    const [key, cb] = tuple;
-    obj[key] = sim(1000, false, cb);
+  const data = timerWrap(() => SampleStrategies.reduce((obj, strat) => {
+    const { label, cb } = strat;
+    obj[label] = sim(1000, false, cb);
     return obj;
   }, {} as Record<string, number>));
   res.send(data);

@@ -9,6 +9,7 @@ export function shuffle<T>(arr: T[]): T[] {
 export function removeFirst<T>(arr: T[], elm: T): T[] {
   const out = arr.concat();
   const index = out.indexOf(elm);
+  if (index < 0) { throw new Error('element not found for removal: ' + elm); }
   out.splice(index, 1);
   return out;
 }

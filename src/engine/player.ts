@@ -1,12 +1,12 @@
-import { types } from "util";
 import { Card } from "../cards";
-import { ActiveTurnState, BasicCards, BaseSet, CardID, CardType, PlayerState, SimFunction } from "../types";
+import { ActiveTurnState, BasicCards, CardID, CardType, PlayerState, SimFunction } from "../types";
 import { range, removeFirst, repeat, shuffle } from "../util";
 
 export class Player {
   constructor(
     readonly state: PlayerState,
     readonly strategy: SimFunction,
+    readonly log?: boolean,
   ) {};
 
   drawFive() {
@@ -45,6 +45,11 @@ export class Player {
 
   playTurn() {
     this.state.turnNum++;
+    if (this.log) { console.log(this.state); }
+    if (this.state.turnNum > 99) {
+      console.log(this.state);
+      throw new Error('stuck in loop!');
+    }
     const turn: ActiveTurnState = {
       actions: 1,
       buys: 1,
@@ -73,32 +78,32 @@ export class Player {
   }
   private playTreasure(turn: ActiveTurnState) {
     const { state } = this;
-    const card = (
-      (state.hand.includes(BasicCards.Gold) && BasicCards.Gold) ||
-      (state.hand.includes(BasicCards.Silver) && BasicCards.Silver) ||
-      (state.hand.includes(BasicCards.Copper) && BasicCards.Copper) ||
-      undefined
-    );
-    if (card) {
-      // update state
-      this.playCard(turn, card);
-      // go again
-      this.playTreasure(turn);
+    while (true) {
+      const treasures = state.hand
+        .map(c => Card.get(c))
+        .filter(c => c.props.types.includes(CardType.Treasure))
+
+      const next = treasures[0];
+      if (!next) { break; }
+
+      this.playCard(turn, next.props.id);
     }
   }
   private playBuy(turn: ActiveTurnState) {
     const { state } = this;
-    const gains = [];
     while (turn.buys > 0) {
       turn.buys--;
       const toGain = this.strategy(state, turn);
       if (toGain) {
-        // todo track buys and money
-        gains.push(toGain);
+        const cost = Card.get(toGain).props.cost;
+        if (cost > turn.money) {
+          throw new Error('illegal purchase decision! not enough money');
+        }
+        turn.money -= cost;
+        state.discard.push(toGain);
+        state.gained.push(toGain);
       }
     }
-    state.discard.push(...gains);
-    state.gained.push(...gains);
   }
   private playCleanup() {
     const { state } = this;
@@ -108,7 +113,7 @@ export class Player {
     this.drawFive();
   }
 
-  static new(strategy: SimFunction) {
+  static new(strategy: SimFunction, log?: boolean) {
     const p = new Player({
       turnNum: 0,
       deck: [],
@@ -120,7 +125,7 @@ export class Player {
       play: [],
       gained: [],
       trashed: [],
-    }, strategy);
+    }, strategy, log);
     p.drawFive();
     return p;
   }

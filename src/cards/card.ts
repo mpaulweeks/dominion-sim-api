@@ -1,4 +1,16 @@
-import { CardID, CardProperties, PlayEffects, PlayerState } from "../types";
+import { CardID, CardProperties, CardType, PlayEffects, PlayerState } from "../types";
+
+export function totalTreasure(player: PlayerState) {
+  return [
+    ...player.deck,
+    ...player.discard,
+    ...player.hand,
+    ...player.play,
+  ].map(c => Card.get(c))
+  .filter(c => c.props.types.includes(CardType.Treasure))
+  .map(c => c.onPlay(player).money)
+  .reduce((sum, cur) => sum + cur, 0);
+}
 
 export class Card {
   constructor(
