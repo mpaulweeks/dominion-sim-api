@@ -1,4 +1,4 @@
-import { sim } from "./engine";
+import { sim, simBuy } from "./engine";
 import { SampleStrategies } from "./strategy/sample";
 
 function main() {
@@ -8,6 +8,11 @@ function main() {
   if (!strategy) {
     return console.log('strategy not found:', strategyId);
   }
-  console.log(sim(1, true, strategy.cb));
+  if (strategy.cb) {
+    console.log(sim(1, true, strategy.cb));
+  }
+  if (strategy.buyOrders) {
+    console.log(simBuy(1, true, strategy.buyOrders));
+  }
 }
 main();

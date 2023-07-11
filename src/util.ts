@@ -32,3 +32,14 @@ export function range(length: number): number[] {
 export function repeat<T>(elm: T, count: number) {
   return range(count).map(() => elm);
 }
+
+export function toCount<T>(arr: T[]) {
+  const map = new Map<T, number>();
+  arr.forEach(elm => {
+    map.set(elm, 1 + (map.get(elm) ?? 0));
+  });
+  return {
+    get: (elm: T) => map.get(elm) ?? 0,
+    subtract: (elm: T, num: number) => map.set(elm, (map.get(elm) ?? 0) - num),
+  };
+}

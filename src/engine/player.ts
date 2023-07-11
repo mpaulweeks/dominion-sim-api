@@ -47,7 +47,7 @@ export class Player {
     this.state.turnNum++;
     if (this.log) { console.log(this.state); }
     if (this.state.turnNum > 99) {
-      console.log(this.state);
+      console.log(this.state, this.strategy.toString());
       throw new Error('stuck in loop!');
     }
     const turn: ActiveTurnState = {

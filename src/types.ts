@@ -82,3 +82,6 @@ export type CardProperties = {
   vp?: number;
   onPlay?: (player: PlayerState) => PlayEffects;
 }
+
+export const Infin = '∞';
+export type BuyOrder = [CardID, typeof Infin | number];

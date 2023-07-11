@@ -1,11 +1,8 @@
-import { BasicCards, BaseSet, SimFunction, CardID } from "../engine";
-
-const Infinity = '∞';
-type BuyOrder = [CardID, typeof Infinity | number];
+import { BasicCards, BaseSet, SimFunction, CardID, BuyOrder, Infin } from "../engine";
 
 export type Strategy = {
   label: string;
-  cb: SimFunction;
+  cb?: SimFunction;
   buyOrders?: BuyOrder[];
 }
 
@@ -19,9 +16,9 @@ export const SampleStrategies: Strategy[] = [{
     // else buy nothing
   },
   buyOrders: [
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
+    [BasicCards.Silver, Infin ],
   ],
 }, {
   label: 'SmithyBigMoney',
@@ -37,10 +34,10 @@ export const SampleStrategies: Strategy[] = [{
     if (money >= 3) return BasicCards.Silver;
   },
   buyOrders: [
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
     [BaseSet.Smithy, 2 ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Silver, Infin ],
   ],
 }, {
   label: 'LabBigMoney',
@@ -52,10 +49,10 @@ export const SampleStrategies: Strategy[] = [{
     if (money >= 3) return BasicCards.Silver;
   },
   buyOrders: [
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
-    [BaseSet.Laboratory, Infinity ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
+    [BaseSet.Laboratory, Infin ],
+    [BasicCards.Silver, Infin ],
   ],
 }, {
   label: 'MarketBigMoney',
@@ -67,10 +64,10 @@ export const SampleStrategies: Strategy[] = [{
     if (money >= 3) return BasicCards.Silver;
   },
   buyOrders: [
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
-    [BaseSet.Market, Infinity ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
+    [BaseSet.Market, Infin ],
+    [BasicCards.Silver, Infin ],
   ],
 }, {
   label: 'VillageSmithy',
@@ -87,8 +84,8 @@ export const SampleStrategies: Strategy[] = [{
     if (money >= 3) return BasicCards.Silver;
   },
   buyOrders: [
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
     [BaseSet.Smithy, 2 ],
     [BasicCards.Silver, 2 ],
     [BaseSet.Village, 1 ],
@@ -98,7 +95,7 @@ export const SampleStrategies: Strategy[] = [{
     [BaseSet.Village, 1 ],
     [BaseSet.Smithy, 1 ],
     [BaseSet.Village, 1 ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Silver, Infin ],
   ],
 }, {
   label: 'Chapel',
@@ -112,9 +109,9 @@ export const SampleStrategies: Strategy[] = [{
   },
   buyOrders: [
     [BaseSet.Chapel, 1 ],
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
+    [BasicCards.Silver, Infin ],
   ],
 }, {
   label: 'ChapelLab',
@@ -129,9 +126,9 @@ export const SampleStrategies: Strategy[] = [{
   },
   buyOrders: [
     [BaseSet.Chapel, 1 ],
-    [BasicCards.Province, Infinity ],
-    [BasicCards.Gold, Infinity ],
-    [BaseSet.Laboratory, Infinity ],
-    [BasicCards.Silver, Infinity ],
+    [BasicCards.Province, Infin ],
+    [BasicCards.Gold, Infin ],
+    [BaseSet.Laboratory, Infin ],
+    [BasicCards.Silver, Infin ],
   ],
 }];
