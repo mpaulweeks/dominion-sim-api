@@ -10,17 +10,25 @@ export enum BaseSet {
   Smithy = 'Smithy',
   Village = 'Village',
 }
-export type Card = BaseCards | BaseSet;
+export type CardID = BaseCards | BaseSet;
 
-export type TurnState = {
+export type PlayerState = {
+  turnNum: number;
+  deck: CardID[];
+  hand: CardID[];
+  discard: CardID[];
+  play: CardID[];
+  readonly gained: CardID[];
+  readonly trashed: CardID[];
+};
+
+export type ActiveTurnState = {
   actions: number,
   buys: number,
   money: number,
-  deck: Card[];
-  hand: Card[];
-  discard: Card[];
-  play: Card[];
-  readonly gained: Card[];
-  turnNum: number;
 };
-export type SimFunction = (state: TurnState) => Card | undefined;
+
+export type SimFunction = (
+  player: PlayerState,
+  turn: ActiveTurnState,
+) => CardID | undefined;
