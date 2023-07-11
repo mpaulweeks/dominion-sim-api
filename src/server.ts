@@ -1,5 +1,5 @@
 import express from 'express';
-import { sim, simBuy } from './engine';
+import { simBuy } from './engine';
 import { SampleStrategies } from './strategy/sample';
 
 function timerWrap<T>(cb: () => T): {
@@ -19,13 +19,8 @@ const app = express();
 
 app.get('/', (req, res) => {
   const data = timerWrap(() => SampleStrategies.reduce((obj, strat) => {
-    const { label, cb, buyOrders } = strat;
-    if (cb) {
-      obj[label + '-CB'] = sim(1000, false, cb);
-    }
-    if (buyOrders) {
-      obj[label + '-Buy'] = simBuy(1000, false, buyOrders);
-    }
+    const { label, shoppingList } = strat;
+    obj[label] = simBuy(10000, false, shoppingList);
     return obj;
   }, {} as Record<string, number>));
   res.send(data);
