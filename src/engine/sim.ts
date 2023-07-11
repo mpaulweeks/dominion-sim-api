@@ -4,7 +4,7 @@ import { Player } from "./player";
 function simGame(cb: SimFunction, log: boolean): PlayerState {
   const player = Player.new(cb, log);
 
-  while (player.state.gained.filter(c => c === BasicCards.Province).length < 5) {
+  while (player.state.gained.match(BasicCards.Province).length < 5) {
     player.playTurn();
   }
 

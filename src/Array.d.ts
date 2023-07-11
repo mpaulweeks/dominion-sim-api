@@ -2,5 +2,6 @@
 // export {};
 
 declare interface Array<T> {
+  match(elm: T): T[];
   sortBy<V>(cb: (elm: T) => V): T[];
 }

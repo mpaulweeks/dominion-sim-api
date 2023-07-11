@@ -7,7 +7,7 @@ export function totalTreasure(player: PlayerState) {
     ...player.hand,
     ...player.play,
   ].map(c => Card.get(c))
-  .filter(c => c.props.types.includes(CardType.Treasure))
+  .filter(c => c.isType(CardType.Treasure))
   .map(c => c.onPlay(player).money)
   .reduce((sum, cur) => sum + cur, 0);
 }
@@ -17,6 +17,11 @@ export class Card {
     readonly props: CardProperties,
   ) {
     Card.cache.set(props.id, this);
+  }
+
+  // helpers
+  isType(type: CardType) {
+    return this.props.types.includes(type);
   }
 
   get defaultEffects(): Required<PlayEffects> {

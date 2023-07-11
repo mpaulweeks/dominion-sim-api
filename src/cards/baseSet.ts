@@ -20,9 +20,9 @@ const simpleCards: CardProperties[] = [{
     const howManyCopperToTrash = totalTreasure(player) - 3;
     return {
       trashFromHand: [
-        ...player.hand.filter(c => c === BasicCards.Curse),
-        ...player.hand.filter(c => c === BasicCards.Estate),
-        ...player.hand.filter(c => c === BasicCards.Copper).slice(howManyCopperToTrash),
+        ...player.hand.match(BasicCards.Curse),
+        ...player.hand.match(BasicCards.Estate),
+        ...player.hand.match(BasicCards.Copper).slice(howManyCopperToTrash),
       ].slice(0, 4),
     };
   },

@@ -30,7 +30,7 @@ export class Player {
     const card = Card.get(id);
     const effects = card.onPlay(state);
 
-    if (card.props.types.includes(CardType.Action)) {
+    if (card.isType(CardType.Action)) {
       turn.actions--;
     }
     turn.actions += effects.actions;
@@ -66,7 +66,7 @@ export class Player {
     while (turn.actions > 0) {
       const actions = state.hand
         .map(c => Card.get(c))
-        .filter(c => c.props.types.includes(CardType.Action))
+        .filter(c => c.isType(CardType.Action))
         .sortBy(c => c.onPlay(state).actions)
         .reverse();
 
@@ -81,7 +81,7 @@ export class Player {
     while (true) {
       const treasures = state.hand
         .map(c => Card.get(c))
-        .filter(c => c.props.types.includes(CardType.Treasure))
+        .filter(c => c.isType(CardType.Treasure))
 
       const next = treasures[0];
       if (!next) { break; }

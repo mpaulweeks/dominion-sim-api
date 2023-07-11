@@ -27,7 +27,7 @@ export const SampleStrategies: Strategy[] = [{
   label: 'SmithyBigMoney',
   cb: (player, turn) => {
     const { money } = turn;
-    const smithy = player.gained.filter(c => c === BaseSet.Smithy).length;
+    const smithy = player.gained.match(BaseSet.Smithy).length;
     if (money >= 8) return BasicCards.Province;
     if (money >= 6) return BasicCards.Gold;
     // if less than 2 smithy in deck
@@ -76,8 +76,8 @@ export const SampleStrategies: Strategy[] = [{
   label: 'VillageSmithy',
   cb: (player, turn) => {
     const { money } = turn;
-    const smithy = player.gained.filter(c => c === BaseSet.Smithy).length;
-    const village = player.gained.filter(c => c === BaseSet.Village).length;
+    const smithy = player.gained.match(BaseSet.Smithy).length;
+    const village = player.gained.match(BaseSet.Village).length;
     if (money >= 8) return BasicCards.Province;
     if (money >= 6) return BasicCards.Gold;
     // buy up to 5 smithy, but only if you have comparable villages
@@ -104,7 +104,7 @@ export const SampleStrategies: Strategy[] = [{
   label: 'Chapel',
   cb: (player, turn) => {
     const { money } = turn;
-    const chapel = player.gained.filter(c => c === BaseSet.Chapel).length;
+    const chapel = player.gained.match(BaseSet.Chapel).length;
     if (money >= 2 && chapel < 1) return BaseSet.Chapel;
     if (money >= 8) return BasicCards.Province;
     if (money >= 6) return BasicCards.Gold;
@@ -120,7 +120,7 @@ export const SampleStrategies: Strategy[] = [{
   label: 'ChapelLab',
   cb: (player, turn) => {
     const { money } = turn;
-    const chapel = player.gained.filter(c => c === BaseSet.Chapel).length;
+    const chapel = player.gained.match(BaseSet.Chapel).length;
     if (money >= 2 && chapel < 1) return BaseSet.Chapel;
     if (money >= 8) return BasicCards.Province;
     if (money >= 6) return BasicCards.Gold;
