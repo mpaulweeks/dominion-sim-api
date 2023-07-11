@@ -1,3 +1,3 @@
-export * from './baseCards';
+export * from './basicCards';
 export * from './baseSet';
 export * from './card';

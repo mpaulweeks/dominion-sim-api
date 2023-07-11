@@ -1,7 +1,7 @@
 import { BasicCards, CardProperties, CardType } from "../types";
 import { Card } from "./card";
 
-const baseCardProps: CardProperties[] = [{
+const basicCardProps: CardProperties[] = [{
   id: BasicCards.Gold,
   cost: 6,
   types: [CardType.Treasure],
@@ -38,4 +38,4 @@ const baseCardProps: CardProperties[] = [{
   vp: -1,
 }];
 
-export const AllBaseCards = baseCardProps.map(p => new Card(p));
+export const AllBasicCards = basicCardProps.map(p => new Card(p));
