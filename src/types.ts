@@ -1,17 +1,41 @@
-export enum BaseCards {
-  Province = 'Province',
-  Duchy = 'Duchy',
-  Estate = 'Estate',
-  Curse = 'Curse',
-  Gold = 'Gold',
-  Silver = 'Silver',
-  Copper = 'Copper',
+export enum BasicCards {
+  Province = 'province',
+  Duchy = 'duchy',
+  Estate = 'estate',
+  Curse = 'curse',
+  Gold = 'gold',
+  Silver = 'silver',
+  Copper = 'copper',
 }
 export enum BaseSet {
-  Smithy = 'Smithy',
-  Village = 'Village',
+  Cellar = 'cellar',
+  Chapel = 'chapel',
+  Moat = 'moat',
+  Harbinger = 'harbinger',
+  Merchant = 'merchant',
+  Vassal = 'vassal',
+  Workshop = 'workshop',
+  Bureaucrat = 'bureaucrat',
+  Gardens = 'gardens',
+  Militia = 'militia',
+  Moneylender = 'moneylender',
+  Poacher = 'poacher',
+  Remodel = 'remodel',
+  ThroneRoom = 'throne room',
+  Bandit = 'bandit',
+  CouncilRoom = 'council room',
+  Festival = 'festival',
+  Laboratory = 'laboratory',
+  Library = 'library',
+  Market = 'market',
+  Mine = 'mine',
+  Sentry = 'sentry',
+  Witch = 'witch',
+  Artisan = 'artisan',
+  Smithy = 'smithy',
+  Village = 'village',
 }
-export type CardID = BaseCards | BaseSet;
+export type CardID = BasicCards | BaseSet;
 
 export enum CardType {
   Victory = 1,
@@ -42,17 +66,19 @@ export type SimFunction = (
 ) => CardID | undefined;
 
 // card
-export type BasicEffects = {
+export type PlayEffects = {
   actions?: number;
   draw?: number;
   buys?: number;
   money?: number;
   vp?: number;
+  trashFromHand?: CardID[];
 };
 
 export type CardProperties = {
   id: CardID;
   cost: number;
   types: CardType[];
-  basicEffects?: BasicEffects;
+  vp?: number;
+  onPlay?: (player: PlayerState) => PlayEffects;
 }

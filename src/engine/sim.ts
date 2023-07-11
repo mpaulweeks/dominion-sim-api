@@ -1,10 +1,10 @@
-import { BaseCards, PlayerState, SimFunction } from "../types";
+import { BasicCards, PlayerState, SimFunction } from "../types";
 import { Player } from "./player";
 
 function simGame(cb: SimFunction, log: boolean): PlayerState {
   const player = Player.new(cb);
 
-  while (player.state.gained.filter(c => c === BaseCards.Province).length < 5) {
+  while (player.state.gained.filter(c => c === BasicCards.Province).length < 5) {
     player.playTurn();
   }
 

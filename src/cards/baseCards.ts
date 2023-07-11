@@ -1,41 +1,41 @@
-import { BaseCards, CardProperties, CardType } from "../types";
+import { BasicCards, CardProperties, CardType } from "../types";
 import { Card } from "./card";
 
 const baseCardProps: CardProperties[] = [{
-  id: BaseCards.Gold,
+  id: BasicCards.Gold,
   cost: 6,
   types: [CardType.Treasure],
-  basicEffects: { money: 3, },
+  onPlay: () => ({ money: 3, }),
 }, {
-  id: BaseCards.Silver,
+  id: BasicCards.Silver,
   cost: 3,
   types: [CardType.Treasure],
-  basicEffects: { money: 2, },
+  onPlay: () => ({ money: 2, }),
 }, {
-  id: BaseCards.Copper,
+  id: BasicCards.Copper,
   cost: 0,
   types: [CardType.Treasure],
-  basicEffects: { money: 1, },
+  onPlay: () => ({ money: 1, }),
 }, {
-  id: BaseCards.Province,
+  id: BasicCards.Province,
   cost: 8,
   types: [CardType.Victory],
-  basicEffects: { vp: 6, },
+  vp: 6,
 }, {
-  id: BaseCards.Duchy,
+  id: BasicCards.Duchy,
   cost: 5,
   types: [CardType.Victory],
-  basicEffects: { vp: 3, },
+  vp: 3,
 }, {
-  id: BaseCards.Estate,
+  id: BasicCards.Estate,
   cost: 2,
   types: [CardType.Victory],
-  basicEffects: { vp: 1, },
+  vp: 1,
 }, {
-  id: BaseCards.Curse,
+  id: BasicCards.Curse,
   cost: 0,
   types: [CardType.Curse],
-  basicEffects: { vp: -1, },
+  vp: -1,
 }];
 
 export const AllBaseCards = baseCardProps.map(p => new Card(p));

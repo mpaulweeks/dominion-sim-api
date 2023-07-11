@@ -1,5 +1,5 @@
 import { Card } from "../cards";
-import { ActiveTurnState, BaseCards, BaseSet, CardID, CardType, PlayerState, SimFunction } from "../types";
+import { ActiveTurnState, BasicCards, BaseSet, CardID, CardType, PlayerState, SimFunction } from "../types";
 import { range, removeFirst, repeat, shuffle } from "../util";
 
 export class Player {
@@ -23,17 +23,23 @@ export class Player {
 
   private playCard(turn: ActiveTurnState, id: CardID) {
     const { state } = this;
-    state.hand = removeFirst(state.hand, c => c === id);
+    state.hand = removeFirst(state.hand, id);
     state.play.push(id);
 
     const card = Card.get(id);
+    const effects = card.onPlay(state);
+
     if (card.props.types.includes(CardType.Action)) {
       turn.actions--;
     }
-    turn.actions += card.props.basicEffects?.actions ?? 0;
-    turn.buys += card.props.basicEffects?.buys ?? 0;
-    turn.money += card.props.basicEffects?.money ?? 0;
-    range(card.props.basicEffects?.draw ?? 0).forEach(() => this.draw());
+    turn.actions += effects.actions;
+    turn.buys += effects.buys;
+    turn.money += effects.money;
+    effects.trashFromHand.forEach(toTrash => {
+      state.hand = removeFirst(state.hand, toTrash);
+      state.trashed.push(toTrash);
+    });
+    range(effects.draw).forEach(() => this.draw());
   }
 
   playTurn() {
@@ -68,9 +74,9 @@ export class Player {
   private playTreasure(turn: ActiveTurnState) {
     const { state } = this;
     const card = (
-      (state.hand.includes(BaseCards.Gold) && BaseCards.Gold) ||
-      (state.hand.includes(BaseCards.Silver) && BaseCards.Silver) ||
-      (state.hand.includes(BaseCards.Copper) && BaseCards.Copper) ||
+      (state.hand.includes(BasicCards.Gold) && BasicCards.Gold) ||
+      (state.hand.includes(BasicCards.Silver) && BasicCards.Silver) ||
+      (state.hand.includes(BasicCards.Copper) && BasicCards.Copper) ||
       undefined
     );
     if (card) {
@@ -107,8 +113,8 @@ export class Player {
       turnNum: 0,
       deck: [],
       discard: [
-        ...repeat(BaseCards.Estate, 3),
-        ...repeat(BaseCards.Copper, 7),
+        ...repeat(BasicCards.Estate, 3),
+        ...repeat(BasicCards.Copper, 7),
       ],
       hand: [],
       play: [],
