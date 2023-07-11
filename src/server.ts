@@ -19,8 +19,8 @@ const app = express();
 
 app.get('/', (req, res) => {
   const data = timerWrap(() => SampleStrategies.reduce((obj, strat) => {
-    const { label, shoppingList } = strat;
-    obj[label] = simBuy(10000, false, shoppingList);
+    const { label } = strat;
+    obj[label] = simBuy(1000, false, strat);
     return obj;
   }, {} as Record<string, number>));
   res.send(data);

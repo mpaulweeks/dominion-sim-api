@@ -8,6 +8,6 @@ function main() {
   if (!strategy) {
     return console.log('strategy not found:', strategyId);
   }
-  console.log(simBuy(1, true, strategy.shoppingList));
+  console.log(simBuy(1, true, strategy));
 }
 main();

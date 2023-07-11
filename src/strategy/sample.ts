@@ -1,9 +1,4 @@
-import { BasicCards, BaseSet, SimFunction, CardID, BuyOrder, Infin } from "../engine";
-
-export type Strategy = {
-  label: string;
-  shoppingList: BuyOrder[];
-}
+import { BasicCards, BaseSet, Infin, Strategy } from "../engine";
 
 export const SampleStrategies: Strategy[] = [{
   label: 'BigMoney',

@@ -85,3 +85,7 @@ export type CardProperties = {
 
 export const Infin = '∞';
 export type BuyOrder = [CardID, typeof Infin | number];
+export type Strategy = {
+  label: string;
+  shoppingList: BuyOrder[];
+}

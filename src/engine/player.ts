@@ -1,13 +1,17 @@
 import { Card } from "../cards";
-import { ActiveTurnState, BasicCards, CardID, CardType, PlayerState, SimFunction } from "../types";
+import { ActiveTurnState, BasicCards, CardID, CardType, PlayerState, Strategy } from "../types";
 import { range, removeFirst, repeat, shuffle } from "../util";
+import { ShoppingList } from "./shopping";
 
 export class Player {
+  readonly shoppingList: ShoppingList;
   constructor(
     readonly state: PlayerState,
-    readonly strategy: SimFunction,
+    readonly strategy: Strategy,
     readonly log?: boolean,
-  ) {};
+  ) {
+    this.shoppingList = new ShoppingList(strategy.shoppingList);
+  };
 
   drawFive() {
     range(5).forEach(() => this.draw());
@@ -93,12 +97,9 @@ export class Player {
     const { state } = this;
     while (turn.buys > 0) {
       turn.buys--;
-      const toGain = this.strategy(state, turn);
+      const toGain = this.shoppingList.determineBuy(state, turn);
       if (toGain) {
         const cost = Card.get(toGain).props.cost;
-        if (cost > turn.money) {
-          throw new Error('illegal purchase decision! not enough money');
-        }
         turn.money -= cost;
         state.discard.push(toGain);
         state.gained.push(toGain);
@@ -113,7 +114,7 @@ export class Player {
     this.drawFive();
   }
 
-  static new(strategy: SimFunction, log?: boolean) {
+  static new(strategy: Strategy, log?: boolean) {
     const p = new Player({
       turnNum: 0,
       deck: [],
