@@ -50,8 +50,8 @@ export type PlayerState = {
   hand: CardID[];
   discard: CardID[];
   play: CardID[];
-  readonly gained: CardID[];
-  readonly trashed: CardID[];
+  readonly gainHistory: CardID[];
+  readonly trashHistory: CardID[];
 };
 
 export type ActiveTurnState = {

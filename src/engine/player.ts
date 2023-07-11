@@ -42,7 +42,7 @@ export class Player {
     turn.money += effects.money;
     effects.trashFromHand.forEach(toTrash => {
       state.hand = removeFirst(state.hand, toTrash);
-      state.trashed.push(toTrash);
+      state.trashHistory.push(toTrash);
     });
     range(effects.draw).forEach(() => this.draw());
   }
@@ -102,7 +102,7 @@ export class Player {
         const cost = Card.get(toGain).props.cost;
         turn.money -= cost;
         state.discard.push(toGain);
-        state.gained.push(toGain);
+        state.gainHistory.push(toGain);
       }
     }
   }
@@ -124,8 +124,8 @@ export class Player {
       ],
       hand: [],
       play: [],
-      gained: [],
-      trashed: [],
+      gainHistory: [],
+      trashHistory: [],
     }, strategy, log);
     p.drawFive();
     return p;

@@ -6,7 +6,7 @@ export class ShoppingList {
   constructor(readonly buyOrders: BuyOrder[]) {}
 
   determineBuy(player: PlayerState, turn: ActiveTurnState): CardID | undefined {
-    const inventory = toCount(player.gained);
+    const inventory = toCount(player.gainHistory);
     for (const [id, num] of this.buyOrders) {
       // can we afford it?
       const card = Card.get(id);

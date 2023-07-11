@@ -4,7 +4,7 @@ import { Player } from "./player";
 function simGame(strategy: Strategy, log: boolean): PlayerState {
   const player = Player.new(strategy, log);
 
-  while (player.state.gained.match(BasicCards.Province).length < 5) {
+  while (player.state.gainHistory.match(BasicCards.Province).length < 5) {
     player.playTurn();
   }
 
