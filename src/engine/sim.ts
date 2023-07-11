@@ -1,21 +1,37 @@
-import { BasicCards, PlayerState, Strategy } from "../types";
+import { BasicCards, PlayerState, Strategy, TurnSnapshot } from "../types";
+import { average, range } from "../util";
 import { Player } from "./player";
 
-function simGame(strategy: Strategy, log: boolean): PlayerState {
+type GameRecord = {
+  state: PlayerState;
+  turns: TurnSnapshot[];
+}
+
+function simGame(strategy: Strategy, log: boolean): GameRecord {
   const player = Player.new(strategy, log);
 
   while (player.state.gainHistory.match(BasicCards.Province).length < 5) {
     player.playTurn();
   }
 
-  return player.state;
+  return {
+    state: player.state,
+    turns: player.turnHistory.toArray(),
+  };
 }
 
 export function simBuy(count: number, logFirst: boolean, strategy: Strategy) {
-  const turns: number[] = [];
+  const records: GameRecord[] = [];
   for (let i = 0; i < count; i++) {
-    turns.push(simGame(strategy, logFirst && i === 0).turnNum);
+    const game = simGame(strategy, logFirst && i === 0);
+    records.push(game);
   }
-  const avg = turns.reduce((sum, cur) => sum + cur, 0) / count;
-  return avg;
+
+  return {
+    totalTurns: average(records.map(r => r.state.turnNum)),
+    turns: range(Math.max(...records.map(r => r.turns.length))).map(i => ({
+      money: average(records.map(r => r.turns[i]?.money).filter(n => n !== undefined)),
+      vpTotal: average(records.map(r => r.turns[i]?.vpTotal).filter(n => n !== undefined)),
+    })),
+  }
 }

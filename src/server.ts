@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
     const { label } = strat;
     obj[label] = simBuy(1000, false, strat);
     return obj;
-  }, {} as Record<string, number>));
+  }, {} as Record<string, any>));
   res.send(data);
 });
 

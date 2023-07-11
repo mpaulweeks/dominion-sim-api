@@ -1,5 +1,6 @@
+import { totalTreasure } from "../engine/helpers";
 import { BasicCards, BaseSet, CardProperties, CardType, PlayerState } from "../types";
-import { Card, totalTreasure } from "./card";
+import { Card } from "./card";
 
 const simpleCards: CardProperties[] = [{
   id: BaseSet.Laboratory,

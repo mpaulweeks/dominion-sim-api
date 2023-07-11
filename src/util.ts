@@ -43,3 +43,7 @@ export function toCount<T>(arr: T[]) {
     subtract: (elm: T, num: number) => map.set(elm, (map.get(elm) ?? 0) - num),
   };
 }
+
+export function average(arr: number[]): number {
+  return arr.reduce((sum, cur) => sum + cur, 0) / arr.length;
+}

@@ -1,10 +1,13 @@
 import { Card } from "../cards";
-import { ActiveTurnState, BasicCards, CardID, CardType, PlayerState, Strategy } from "../types";
+import { ActiveTurnState, BasicCards, CardID, CardType, NewTurnSnapshot, PlayerState, Strategy, TurnSnapshot } from "../types";
 import { range, removeFirst, repeat, shuffle } from "../util";
+import { totalVP } from "./helpers";
+import { HistoryTracker } from "./history";
 import { ShoppingList } from "./shopping";
 
 export class Player {
   readonly shoppingList: ShoppingList;
+  readonly turnHistory = new HistoryTracker<TurnSnapshot>(NewTurnSnapshot);
   constructor(
     readonly state: PlayerState,
     readonly strategy: Strategy,
@@ -22,6 +25,7 @@ export class Player {
       if (state.discard.length === 0) { return; }
       state.deck.push(...shuffle(state.discard));
       state.discard = [];
+      this.turnHistory.latest.shuffles++;
     }
     state.hand.push(state.deck.pop()!);
   }
@@ -54,6 +58,8 @@ export class Player {
       console.log(this.state, this.strategy.toString());
       throw new Error('stuck in loop!');
     }
+
+    const snapshot = this.turnHistory.next();
     const turn: ActiveTurnState = {
       actions: 1,
       buys: 1,
@@ -62,7 +68,9 @@ export class Player {
 
     this.playActions(turn);
     this.playTreasure(turn);
+    snapshot.money = turn.money;
     this.playBuy(turn);
+    snapshot.vpTotal = totalVP(this.state);
     this.playCleanup();
   }
   private playActions(turn: ActiveTurnState) {

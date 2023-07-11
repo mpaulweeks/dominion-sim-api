@@ -1,3 +1,9 @@
+export enum CardType {
+  Victory = 1,
+  Curse,
+  Action,
+  Treasure,
+};
 export enum BasicCards {
   Province = 'province',
   Duchy = 'duchy',
@@ -37,13 +43,7 @@ export enum BaseSet {
 }
 export type CardID = BasicCards | BaseSet;
 
-export enum CardType {
-  Victory = 1,
-  Curse,
-  Action,
-  Treasure,
-};
-
+// state
 export type PlayerState = {
   turnNum: number;
   deck: CardID[];
@@ -53,17 +53,23 @@ export type PlayerState = {
   readonly gainHistory: CardID[];
   readonly trashHistory: CardID[];
 };
-
 export type ActiveTurnState = {
   actions: number;
   buys: number;
   money: number;
 };
-
-export type SimFunction = (
-  player: PlayerState,
-  turn: ActiveTurnState,
-) => CardID | undefined;
+export type TurnSnapshot = {
+  shuffles: number;
+  money: number;
+  vpTotal: number;
+};
+export function NewTurnSnapshot(): TurnSnapshot {
+  return {
+    shuffles: 0,
+    money: 0,
+    vpTotal: 0,
+  };
+}
 
 // card
 export type PlayEffects = {
@@ -71,10 +77,9 @@ export type PlayEffects = {
   draw?: number;
   buys?: number;
   money?: number;
-  vp?: number;
+  vpChips?: number;
   trashFromHand?: CardID[];
 };
-
 export type CardProperties = {
   id: CardID;
   cost: number;
@@ -83,6 +88,7 @@ export type CardProperties = {
   onPlay?: (player: PlayerState) => PlayEffects;
 }
 
+// strategy
 export const Infin = '∞';
 export type BuyOrder = [CardID, typeof Infin | number];
 export type Strategy = {
