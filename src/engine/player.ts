@@ -1,4 +1,5 @@
-import { ActiveTurnState, BaseCards, BaseSet, CardID, PlayerState, SimFunction } from "./types";
+import { Card } from "../cards";
+import { ActiveTurnState, BaseCards, BaseSet, CardID, CardType, PlayerState, SimFunction } from "../types";
 import { range, removeFirst, repeat, shuffle } from "../util";
 
 export class Player {
@@ -20,24 +21,19 @@ export class Player {
     state.hand.push(state.deck.pop()!);
   }
 
-  private playCard(turn: ActiveTurnState, card: CardID) {
+  private playCard(turn: ActiveTurnState, id: CardID) {
     const { state } = this;
-    state.hand = removeFirst(state.hand, c => c === card);
-    state.play.push(card);
+    state.hand = removeFirst(state.hand, c => c === id);
+    state.play.push(id);
 
-    if (card === BaseCards.Gold) turn.money += 3;
-    if (card === BaseCards.Silver) turn.money += 2;
-    if (card === BaseCards.Copper) turn.money += 1;
-    if (card === BaseSet.Smithy) {
+    const card = Card.get(id);
+    if (card.props.types.includes(CardType.Action)) {
       turn.actions--;
-      this.draw();
-      this.draw();
-      this.draw();
     }
-    if (card === BaseSet.Village) {
-      turn.actions++;
-      this.draw();
-    }
+    turn.actions += card.props.basicEffects?.actions ?? 0;
+    turn.buys += card.props.basicEffects?.buys ?? 0;
+    turn.money += card.props.basicEffects?.money ?? 0;
+    range(card.props.basicEffects?.draw ?? 0).forEach(() => this.draw());
   }
 
   playTurn() {

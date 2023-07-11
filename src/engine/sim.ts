@@ -1,4 +1,4 @@
-import { BaseCards, PlayerState, SimFunction } from "./types";
+import { BaseCards, PlayerState, SimFunction } from "../types";
 import { Player } from "./player";
 
 function simGame(cb: SimFunction, log: boolean): PlayerState {
