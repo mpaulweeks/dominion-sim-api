@@ -16,11 +16,12 @@ const simpleCards: CardProperties[] = [{
   cost: 2,
   types: [CardType.Action],
   onPlay: (player: PlayerState) => {
+    // const canTrashCopper = player.trashed.filter(c => c === BasicCards.Copper).length === 0;
     return {
       trashFromHand: [
         ...player.hand.filter(c => c === BasicCards.Curse),
         ...player.hand.filter(c => c === BasicCards.Estate),
-        ...player.hand.filter(c => c === BasicCards.Estate),
+        // ...(canTrashCopper ? player.hand.filter(c => c === BasicCards.Copper) : []),
       ].slice(0, 4),
     };
   },

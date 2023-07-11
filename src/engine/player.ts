@@ -1,3 +1,4 @@
+import { types } from "util";
 import { Card } from "../cards";
 import { ActiveTurnState, BasicCards, BaseSet, CardID, CardType, PlayerState, SimFunction } from "../types";
 import { range, removeFirst, repeat, shuffle } from "../util";
@@ -56,19 +57,18 @@ export class Player {
     this.playCleanup();
   }
   private playActions(turn: ActiveTurnState) {
-    if (turn.actions === 0) { return; }
-
     const { state } = this;
-    const card = (
-      (state.hand.includes(BaseSet.Village) && BaseSet.Village) ||
-      (state.hand.includes(BaseSet.Smithy) && BaseSet.Smithy) ||
-      undefined
-    );
-    if (card) {
-      // update state
-      this.playCard(turn, card);
-      // go again
-      this.playActions(turn);
+    while (turn.actions > 0) {
+      const actions = state.hand
+        .map(c => Card.get(c))
+        .filter(c => c.props.types.includes(CardType.Action))
+        .sortBy(c => c.onPlay(state).actions)
+        .reverse();
+
+      const next = actions[0];
+      if (!next) { break; }
+
+      this.playCard(turn, next.props.id);
     }
   }
   private playTreasure(turn: ActiveTurnState) {

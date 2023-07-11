@@ -8,6 +8,25 @@ export const BigMoney: SimFunction = (player, turn) => {
   // else buy nothing
 };
 
+export const Chapel: SimFunction = (player, turn) => {
+  const { money } = turn;
+  const chapel = player.gained.filter(c => c === BaseSet.Chapel).length;
+  if (money >= 2 && chapel < 1) return BaseSet.Chapel;
+  if (money >= 8) return BasicCards.Province;
+  if (money >= 6) return BasicCards.Gold;
+  if (money >= 3) return BasicCards.Silver;
+};
+
+export const ChapelLab: SimFunction = (player, turn) => {
+  const { money } = turn;
+  const chapel = player.gained.filter(c => c === BaseSet.Chapel).length;
+  if (money >= 2 && chapel < 1) return BaseSet.Chapel;
+  if (money >= 8) return BasicCards.Province;
+  if (money >= 6) return BasicCards.Gold;
+  if (money >= 5) return BaseSet.Laboratory;
+  if (money >= 3) return BasicCards.Silver;
+};
+
 export const SmithyBigMoney: SimFunction = (player, turn) => {
   const { money } = turn;
   const smithy = player.gained.filter(c => c === BaseSet.Smithy).length;

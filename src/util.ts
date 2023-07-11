@@ -1,3 +1,5 @@
+import './prototype';
+
 export function shuffle<T>(arr: T[]): T[] {
   return arr
     .concat()
