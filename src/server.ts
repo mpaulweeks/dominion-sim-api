@@ -2,8 +2,6 @@ import express from 'express';
 import { sim } from './engine';
 import { SampleStrategies } from './strategy/sample';
 
-const app = express();
-
 function timerWrap<T>(cb: () => T): {
   elapsed: number;
   data: T;
@@ -16,6 +14,9 @@ function timerWrap<T>(cb: () => T): {
   };
 }
 
+const port = process.env.PORT || 3001;
+const app = express();
+
 app.get('/', (req, res) => {
   const data = timerWrap(() => SampleStrategies.reduce((obj, strat) => {
     const { label, cb } = strat;
@@ -25,6 +26,6 @@ app.get('/', (req, res) => {
   res.send(data);
 });
 
-app.listen(3000, () => {
-  console.log('Server started');
+app.listen(port, () => {
+  console.log('Server started on', port);
 });
