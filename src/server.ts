@@ -1,5 +1,5 @@
 import express from 'express';
-import { simBuy } from './engine';
+import { CardID, Infin, simBuy } from './engine';
 import { SampleStrategies } from './strategy/sample';
 
 function timerWrap<T>(cb: () => T): {
@@ -16,6 +16,7 @@ function timerWrap<T>(cb: () => T): {
 
 const port = process.env.PORT || 3001;
 const app = express();
+app.use(express.json());
 
 app.get('/', (req, res) => {
   const data = timerWrap(() => SampleStrategies.reduce((obj, strat) => {
@@ -23,6 +24,24 @@ app.get('/', (req, res) => {
     obj[label] = simBuy(1000, false, strat);
     return obj;
   }, {} as Record<string, any>));
+  res.send(data);
+});
+
+app.post('/sim', (req, res) => {
+  const body: {
+    label: string;
+    shoppingList: [string, number][];
+  }[] = req.body;
+  const data = body.map(player => ({
+    label: player.label,
+    stats: simBuy(1000, false, {
+      label: player.label,
+      shoppingList: player.shoppingList.map(tuple => [
+        tuple[0] as CardID,
+        tuple[1] >= 0 ? tuple[1] : Infin,
+      ]),
+    }),
+  }));
   res.send(data);
 });
 

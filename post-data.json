@@ -1,0 +1,16 @@
+[{
+  "label": "Big Money",
+  "shoppingList": [
+    ["province", -1],
+    ["gold", -1],
+    ["silver", -1]
+  ]
+}, {
+  "label": "Chapel",
+  "shoppingList": [
+    ["chapel", 1],
+    ["province", -1],
+    ["gold", -1],
+    ["silver", -1]
+  ]
+}]
