@@ -1,6 +1,6 @@
 import { Card } from "../cards";
 import { ActiveTurnState, BasicCards, CardID, CardType, NewTurnSnapshot, PlayerState, Strategy, TurnSnapshot } from "../types";
-import { range, removeFirst, repeat, shuffle } from "../util";
+import { range, repeat } from "../util";
 import { totalVP } from "./helpers";
 import { HistoryTracker } from "./history";
 import { ShoppingList } from "./shopping";
@@ -23,7 +23,7 @@ export class Player {
     const { state } = this;
     if (state.deck.length === 0) {
       if (state.discard.length === 0) { return; }
-      state.deck.push(...shuffle(state.discard));
+      state.deck.push(...state.discard.shuffle());
       state.discard = [];
       this.turnHistory.latest.shuffles++;
     }
@@ -32,7 +32,7 @@ export class Player {
 
   private playCard(turn: ActiveTurnState, id: CardID) {
     const { state } = this;
-    state.hand = removeFirst(state.hand, id);
+    state.hand = state.hand.removeFirst(id);
     state.play.push(id);
 
     const card = Card.get(id);
@@ -45,7 +45,7 @@ export class Player {
     turn.buys += effects.buys;
     turn.money += effects.money;
     effects.trashFromHand.forEach(toTrash => {
-      state.hand = removeFirst(state.hand, toTrash);
+      state.hand = state.hand.removeFirst(toTrash);
       state.trashHistory.push(toTrash);
     });
     range(effects.draw).forEach(() => this.draw());

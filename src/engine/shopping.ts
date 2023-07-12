@@ -1,12 +1,15 @@
+import { DefaultMap } from "../DefaultMap";
 import { Card } from "../cards";
 import { ActiveTurnState, BuyOrder, CardID, Infin, PlayerState } from "../types";
-import { toCount } from "../util";
 
 export class ShoppingList {
   constructor(readonly buyOrders: BuyOrder[]) {}
 
   determineBuy(player: PlayerState, turn: ActiveTurnState): CardID | undefined {
-    const inventory = toCount(player.gainHistory);
+    const inventory = new DefaultMap(
+      player.gainHistory.toCount(),
+      () => 0,
+    );
     for (const [id, num] of this.buyOrders) {
       // can we afford it?
       const card = Card.get(id);
@@ -16,7 +19,7 @@ export class ShoppingList {
       if (demand > inventory.get(id)) {
         return id;
       } else {
-        inventory.subtract(id, demand);
+        inventory.transform(id, val => val - demand);
         continue;
       }
     }
