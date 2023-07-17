@@ -1,4 +1,4 @@
-import { CardID, CardProperties, CardType, PlayEffects, PlayerState } from "../types";
+import { CardID, CardProperties, CardType, PlayEffects, PlayerState } from "../shared/types";
 
 export class Card {
   constructor(

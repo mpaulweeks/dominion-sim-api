@@ -1,6 +1,6 @@
-import { DefaultMap } from "../DefaultMap";
+import { DefaultMap } from "../shared/DefaultMap";
 import { Card } from "../cards";
-import { ActiveTurnState, BuyOrder, CardID, Infin, PlayerState } from "../types";
+import { ActiveTurnState, BuyOrder, CardID, Infin, PlayerState } from "../shared/types";
 
 export class ShoppingList {
   constructor(readonly buyOrders: BuyOrder[]) {}

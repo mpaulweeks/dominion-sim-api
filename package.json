@@ -6,11 +6,13 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "script": "npm run build && node dist/script.js",
-    "server": "node dist/server.js",
+    "script": "npm run build && node dist/bin/script.js",
+    "server": "node dist/bin/server.js",
     "watch": "nodemon --exec 'npm run build && npm run server'"
   },
   "dependencies": {
+    "@types/cors": "^2.8.13",
+    "cors": "^2.8.5",
     "express": "^4.18.2"
   },
   "devDependencies": {

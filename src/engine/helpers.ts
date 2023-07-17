@@ -1,5 +1,5 @@
 import { Card } from "../cards";
-import { CardType, PlayerState } from "../types";
+import { CardType, PlayerState } from "../shared/types";
 
 export function allCards(player: PlayerState) {
   return [

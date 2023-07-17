@@ -1,5 +1,5 @@
-import { BasicCards, PlayerState, Strategy, TurnSnapshot } from "../types";
-import { average, range } from "../util";
+import { BasicCards, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
+import { average, range } from "../shared/util";
 import { Player } from "./player";
 
 type GameRecord = {

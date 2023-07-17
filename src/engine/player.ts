@@ -1,6 +1,6 @@
 import { Card } from "../cards";
-import { ActiveTurnState, BasicCards, CardID, CardType, NewTurnSnapshot, PlayerState, Strategy, TurnSnapshot } from "../types";
-import { range, repeat } from "../util";
+import { ActiveTurnState, BasicCards, CardID, CardType, NewTurnSnapshot, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
+import { range, repeat } from "../shared/util";
 import { totalVP } from "./helpers";
 import { HistoryTracker } from "./history";
 import { ShoppingList } from "./shopping";

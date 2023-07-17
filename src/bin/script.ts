@@ -1,5 +1,6 @@
-import { simBuy } from "./engine";
-import { SampleStrategies } from "./strategy/sample";
+import '../prototype';
+import { simBuy } from "../engine";
+import { SampleStrategies } from "../strategy/sample";
 
 function main() {
   console.log(process.argv);

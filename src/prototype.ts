@@ -1,4 +1,4 @@
-import { DefaultMap } from "./DefaultMap";
+import { DefaultMap } from "./shared/DefaultMap";
 
 Array.prototype.groupBy = function<T, V>(this: T[], cb: (elm: T) => V): T[][] {
   const map = new DefaultMap<V, T[]>(new Map(), () => []);

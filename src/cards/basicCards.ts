@@ -1,4 +1,4 @@
-import { BasicCards, CardProperties, CardType } from "../types";
+import { BasicCards, CardProperties, CardType } from "../shared/types";
 import { Card } from "./card";
 
 const basicCardProps: CardProperties[] = [{
