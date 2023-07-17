@@ -1,3 +1,14 @@
+import { DefaultMap } from "./DefaultMap";
+
+Array.prototype.groupBy = function<T, V>(this: T[], cb: (elm: T) => V): T[][] {
+  const map = new DefaultMap<V, T[]>(new Map(), () => []);
+  this.forEach(elm => {
+    const key = cb(elm);
+    map.set(key, map.get(key).concat(elm));
+  });
+  return map.values().map(tuple => tuple[1]);
+}
+
 Array.prototype.match = function<T>(this: T[], elm: T): T[] {
   return this.filter(e => e === elm);
 }
@@ -17,14 +28,14 @@ Array.prototype.removeFirstMatch = function<T>(this: T[], cb: (elm: T) => boolea
   return out;
 }
 
-Array.prototype.sortBy = function<T, V>(this: T[], cb: (elm: T) => V): T[] {
-  return this.concat().sort((a,b) => cb(a) < cb(b) ? -1 : 1);
-}
-
 Array.prototype.shuffle = function<T>(this: T[]): T[] {
   return this
     .concat()
     .sort((a,b) => Math.random() > 0.5 ? -1 : 1);
+}
+
+Array.prototype.sortBy = function<T, V>(this: T[], cb: (elm: T) => V): T[] {
+  return this.concat().sort((a,b) => cb(a) < cb(b) ? -1 : 1);
 }
 
 Array.prototype.toCount = function<T>(this: T[]) {

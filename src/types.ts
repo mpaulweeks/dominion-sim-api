@@ -1,8 +1,8 @@
 export enum CardType {
-  Victory = 1,
-  Curse,
-  Action,
+  Action = 1,
   Treasure,
+  Victory,
+  Curse,
 };
 export enum BasicCards {
   Province = 'province',
@@ -85,6 +85,8 @@ export type CardProperties = {
   cost: number;
   types: CardType[];
   vp?: number;
+  setIndex?: number;
+  setName?: string;
   onPlay?: (player: PlayerState) => PlayEffects;
 }
 

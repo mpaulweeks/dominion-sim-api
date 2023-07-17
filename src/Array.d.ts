@@ -2,6 +2,7 @@
 // export {};
 
 declare interface Array<T> {
+  groupBy<V>(cb: (elm: T) => V): T[][];
   match(elm: T): T[];
   removeFirst(elm: T): T[];
   removeFirstMatch(cb: (elm: T) => boolean): T[];

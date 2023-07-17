@@ -35,4 +35,7 @@ export class Card {
     if (!card) { throw new Error('card does not exist: ' + id)};
     return card;
   }
+  static getAll(): Card[] {
+    return Array.from(this.cache.values()).sortBy(c => c.props.id);
+  }
 }

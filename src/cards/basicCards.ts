@@ -36,6 +36,10 @@ const basicCardProps: CardProperties[] = [{
   cost: 0,
   types: [CardType.Curse],
   vp: -1,
-}];
+}].map<CardProperties>(c => ({
+  ...c,
+  setIndex: 0,
+  setName: 'Basic Cards',
+}));
 
 export const AllBasicCards = basicCardProps.map(p => new Card(p));

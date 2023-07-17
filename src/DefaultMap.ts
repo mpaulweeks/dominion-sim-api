@@ -15,4 +15,7 @@ export class DefaultMap<K, V> {
   transform(key: K, cb: (val: V) => V) {
     return this.set(key, cb(this.get(key)));
   }
+  values(): [K, V][] {
+    return Array.from(this.map.entries());
+  }
 }

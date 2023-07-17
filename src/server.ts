@@ -1,6 +1,7 @@
 import express from 'express';
 import { CardID, Infin, simBuy } from './engine';
 import { SampleStrategies } from './strategy/sample';
+import { Card } from './cards';
 
 function timerWrap<T>(cb: () => T): {
   elapsed: number;
@@ -15,10 +16,40 @@ function timerWrap<T>(cb: () => T): {
 }
 
 const port = process.env.PORT || 3001;
+const appStart = new Date();
 const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
+  res.redirect(302, req.baseUrl + '/health');
+});
+
+app.get('/health', (req, res) => {
+  res.send({
+    appStart: appStart.toISOString(),
+  });
+});
+
+app.get('/cards', (req, res) => {
+  const cards = Card.getAll();
+  const sets = cards
+    .groupBy(c => c.props.setName ?? 'unknown')
+    .map(cards => ({
+      index: cards[0].props.setIndex,
+      name: cards[0].props.setName,
+      cards: cards
+        .sortBy(c => [c.props.types.join(','), c.props.cost, c.props.id].join('-'))
+        .map(c => c.props.id),
+    }))
+    .sortBy(set => set.index)
+    .map(set => {
+      delete set.index;
+      return set;
+    });
+  res.send(sets);
+});
+
+app.get('/sample', (req, res) => {
   const data = timerWrap(() => SampleStrategies.reduce((obj, strat) => {
     const { label } = strat;
     obj[label] = simBuy(1000, false, strat);

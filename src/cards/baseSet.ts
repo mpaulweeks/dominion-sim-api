@@ -55,6 +55,10 @@ const simpleCards: CardProperties[] = [{
   cost: 3,
   types: [CardType.Action],
   onPlay: () => ({ draw: 1, actions: 2 }),
-}];
+}].map<CardProperties>(c => ({
+  ...c,
+  setIndex: 1,
+  setName: 'Base Set v2',
+}));
 
 export const AllBaseSet = simpleCards.map(p => new Card(p));
