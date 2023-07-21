@@ -30,6 +30,18 @@ export class Player {
     state.hand.push(state.deck.pop()!);
   }
 
+  private chooseDiscard(): CardID {
+    // todo generically decide value
+    const { state } = this;
+    const handCards = state.hand.map(Card.get);
+    return (
+      handCards.filter(c => c.isType(CardType.Treasure))[0]?.props.id ||
+      state.hand.match(BasicCards.Curse)[0] ||
+      state.hand.match(BasicCards.Copper)[0] ||
+      state.hand[0]
+    );
+  }
+
   private playCard(turn: ActiveTurnState, id: CardID) {
     const { state } = this;
     state.hand = state.hand.removeFirst(id);
@@ -44,11 +56,21 @@ export class Player {
     turn.actions += effects.actions;
     turn.buys += effects.buys;
     turn.money += effects.money;
+    state.vpChips += effects.vpChips;
+    // todo handle opponent draw
+    effects.gainToHand.forEach(toGain => this.gain(toGain));
     effects.trashFromHand.forEach(toTrash => {
       state.hand = state.hand.removeFirst(toTrash);
       state.trashHistory.push(toTrash);
     });
     range(effects.draw).forEach(() => this.draw());
+    range(effects.discardAfterDraw).forEach(() => {
+      const toDiscard = this.chooseDiscard();
+      if (toDiscard) {
+        state.hand.removeFirst(toDiscard);
+        state.discard.push(toDiscard);
+      }
+    });
   }
 
   playTurn() {
@@ -109,10 +131,14 @@ export class Player {
       if (toGain) {
         const cost = Card.get(toGain).props.cost;
         turn.money -= cost;
-        state.discard.push(toGain);
-        state.gainHistory.push(toGain);
+        this.gain(toGain);
       }
     }
+  }
+  private gain(toGain: CardID) {
+    const { state } = this;
+    state.discard.push(toGain);
+    state.gainHistory.push(toGain);
   }
   private playCleanup() {
     const { state } = this;
@@ -134,6 +160,7 @@ export class Player {
       play: [],
       gainHistory: [],
       trashHistory: [],
+      vpChips: 0,
     }, strategy, log);
     p.drawFive();
     return p;

@@ -16,10 +16,13 @@ export class Card {
     return {
       actions: 0,
       draw: 0,
+      discardAfterDraw: 0,
       buys: 0,
       money: 0,
       vpChips: 0,
+      gainToHand: [],
       trashFromHand: [],
+      opponentsDraw: 0,
     };
   }
   onPlay(player: PlayerState): Required<PlayEffects> {

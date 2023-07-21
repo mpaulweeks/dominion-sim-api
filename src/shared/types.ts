@@ -27,9 +27,9 @@ export enum BaseSet {
   Moneylender = 'moneylender',
   Poacher = 'poacher',
   Remodel = 'remodel',
-  ThroneRoom = 'throne room',
+  ThroneRoom = 'throne_room',
   Bandit = 'bandit',
-  CouncilRoom = 'council room',
+  CouncilRoom = 'council_room',
   Festival = 'festival',
   Laboratory = 'laboratory',
   Library = 'library',
@@ -50,6 +50,7 @@ export type PlayerState = {
   hand: CardID[];
   discard: CardID[];
   play: CardID[];
+  vpChips: number;
   readonly gainHistory: CardID[];
   readonly trashHistory: CardID[];
 };
@@ -75,10 +76,13 @@ export function NewTurnSnapshot(): TurnSnapshot {
 export type PlayEffects = {
   actions?: number;
   draw?: number;
+  discardAfterDraw?: number;
   buys?: number;
   money?: number;
   vpChips?: number;
+  gainToHand?: CardID[];
   trashFromHand?: CardID[];
+  opponentsDraw?: number;
 };
 export type CardProperties = {
   id: CardID;

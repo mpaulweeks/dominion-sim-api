@@ -17,7 +17,7 @@ export class WebServer {
   listen(port: number | string) {
     const { app } = this;
     app.listen(port, () => {
-      console.log('Server started on', port);
+      console.log(`Server started: http://localhost:${port}`);
     });
   }
 
