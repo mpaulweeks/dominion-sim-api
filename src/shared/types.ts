@@ -1,3 +1,5 @@
+import { DefaultMap } from "./DefaultMap";
+
 export enum CardType {
   Action = 1,
   Treasure,
@@ -44,6 +46,10 @@ export enum BaseSet {
 export type CardID = BasicCards | BaseSet;
 
 // state
+export type GameState = {
+  supply: DefaultMap<CardID, number>;
+  trash: CardID[];
+}
 export type PlayerState = {
   turnNum: number;
   deck: CardID[];
@@ -91,7 +97,7 @@ export type CardProperties = {
   vp?: number;
   setIndex?: number;
   setName?: string;
-  onPlay?: (player: PlayerState) => PlayEffects;
+  onPlay?: (player: PlayerState, game: GameState) => PlayEffects;
 }
 
 // strategy

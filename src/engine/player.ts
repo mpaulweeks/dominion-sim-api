@@ -1,5 +1,5 @@
 import { Card } from "../cards";
-import { ActiveTurnState, BasicCards, CardID, CardType, NewTurnSnapshot, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
+import { ActiveTurnState, BasicCards, CardID, CardType, GameState, NewTurnSnapshot, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
 import { range, repeat } from "../shared/util";
 import { totalVP } from "./helpers";
 import { HistoryTracker } from "./history";
@@ -10,6 +10,7 @@ export class Player {
   readonly turnHistory = new HistoryTracker<TurnSnapshot>(NewTurnSnapshot);
   constructor(
     readonly state: PlayerState,
+    readonly game: GameState,
     readonly strategy: Strategy,
     readonly log?: boolean,
   ) {
@@ -43,12 +44,12 @@ export class Player {
   }
 
   private playCard(turn: ActiveTurnState, id: CardID) {
-    const { state } = this;
+    const { game, state } = this;
     state.hand = state.hand.removeFirst(id);
     state.play.push(id);
 
     const card = Card.get(id);
-    const effects = card.onPlay(state);
+    const effects = card.onPlay(state, game);
 
     if (card.isType(CardType.Action)) {
       turn.actions--;
@@ -96,12 +97,12 @@ export class Player {
     this.playCleanup();
   }
   private playActions(turn: ActiveTurnState) {
-    const { state } = this;
+    const { game, state } = this;
     while (turn.actions > 0) {
       const actions = state.hand
         .map(c => Card.get(c))
         .filter(c => c.isType(CardType.Action))
-        .sortBy(c => c.onPlay(state).actions)
+        .sortBy(c => c.onPlay(state, game).actions)
         .reverse();
 
       const next = actions[0];
@@ -124,10 +125,10 @@ export class Player {
     }
   }
   private playBuy(turn: ActiveTurnState) {
-    const { state } = this;
+    const { game, state } = this;
     while (turn.buys > 0) {
       turn.buys--;
-      const toGain = this.shoppingList.determineBuy(state, turn);
+      const toGain = this.shoppingList.determineBuy(game, state, turn);
       if (toGain) {
         const cost = Card.get(toGain).props.cost;
         turn.money -= cost;
@@ -136,7 +137,8 @@ export class Player {
     }
   }
   private gain(toGain: CardID) {
-    const { state } = this;
+    const { game, state } = this;
+    game.supply.transform(toGain, n => n - 1);
     state.discard.push(toGain);
     state.gainHistory.push(toGain);
   }
@@ -148,7 +150,7 @@ export class Player {
     this.drawFive();
   }
 
-  static new(strategy: Strategy, log?: boolean) {
+  static new(game: GameState, strategy: Strategy, log?: boolean) {
     const p = new Player({
       turnNum: 0,
       deck: [],
@@ -161,7 +163,7 @@ export class Player {
       gainHistory: [],
       trashHistory: [],
       vpChips: 0,
-    }, strategy, log);
+    }, game, strategy, log);
     p.drawFive();
     return p;
   }

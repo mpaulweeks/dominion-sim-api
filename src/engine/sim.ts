@@ -1,5 +1,7 @@
-import { BasicCards, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
-import { average, range } from "../shared/util";
+import { Card } from "../cards";
+import { DefaultMap } from "../shared/DefaultMap";
+import { BasicCards, GameState, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
+import { range } from "../shared/util";
 import { Player } from "./player";
 
 type GameRecord = {
@@ -7,31 +9,35 @@ type GameRecord = {
   turns: TurnSnapshot[];
 }
 
-function simGame(strategy: Strategy, log: boolean): GameRecord {
-  const player = Player.new(strategy, log);
+function simGame(strategies: Strategy[], log: boolean): GameRecord[] {
+  const state: GameState = {
+    supply: DefaultMap.empty(c => Card.get(c).startingSupply(strategies.length)),
+    trash: [],
+  };
+  const players = strategies.map(s => Player.new(state, s, log));
 
-  while (player.state.gainHistory.match(BasicCards.Province).length < 5) {
-    player.playTurn();
+  while (state.supply.get(BasicCards.Province) > 0) {
+    players.forEach(p => p.playTurn());
   }
 
-  return {
-    state: player.state,
-    turns: player.turnHistory.toArray(),
-  };
+  return players.map(p => ({
+    state: p.state,
+    turns: p.turnHistory.toArray(),
+  }));
 }
 
 export function simBuy(count: number, logFirst: boolean, strategy: Strategy) {
   const records: GameRecord[] = [];
   for (let i = 0; i < count; i++) {
-    const game = simGame(strategy, logFirst && i === 0);
-    records.push(game);
+    const game = simGame([strategy], logFirst && i === 0);
+    records.push(game[0]);
   }
 
   return {
-    totalTurns: average(records.map(r => r.state.turnNum)),
+    totalTurns: records.map(r => r.state.turnNum).average(),
     turns: range(Math.max(...records.map(r => r.turns.length))).map(i => ({
-      money: average(records.map(r => r.turns[i]?.money).filter(n => n !== undefined)),
-      vpTotal: average(records.map(r => r.turns[i]?.vpTotal).filter(n => n !== undefined)),
+      money: records.map(r => r.turns[i]?.money).filter(n => n !== undefined).average(),
+      vpTotal: records.map(r => r.turns[i]?.vpTotal).filter(n => n !== undefined).average(),
     })),
   }
 }

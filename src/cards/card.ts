@@ -1,4 +1,4 @@
-import { CardID, CardProperties, CardType, PlayEffects, PlayerState } from "../shared/types";
+import { BasicCards, CardID, CardProperties, CardType, GameState, PlayEffects, PlayerState } from "../shared/types";
 
 export class Card {
   constructor(
@@ -10,6 +10,24 @@ export class Card {
   // helpers
   isType(type: CardType) {
     return this.props.types.includes(type);
+  }
+  startingSupply(numPlayers: number): number {
+    if (this.props.id in [BasicCards.Gold, BasicCards.Silver, BasicCards.Copper]) {
+      return 99;
+    }
+    if (this.props.id in [BasicCards.Curse]) {
+      return Math.max(10, (numPlayers - 1) * 10);
+    }
+    if (this.isType(CardType.Victory)) {
+      return {
+        2: 8,
+        3: 12,
+        4: 12,
+        5: 16,
+      }[numPlayers] ?? 8;
+    }
+    // else
+    return 10;
   }
 
   get defaultEffects(): Required<PlayEffects> {
@@ -25,10 +43,10 @@ export class Card {
       opponentsDraw: 0,
     };
   }
-  onPlay(player: PlayerState): Required<PlayEffects> {
+  onPlay(player: PlayerState, game: GameState): Required<PlayEffects> {
     return {
       ...this.defaultEffects,
-      ...(this.props.onPlay ? this.props.onPlay(player) : {}),
+      ...(this.props.onPlay ? this.props.onPlay(player, game) : {}),
     };
   }
 

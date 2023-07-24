@@ -1,5 +1,5 @@
 import { Card } from "../cards";
-import { CardType, PlayerState } from "../shared/types";
+import { CardType, GameState, PlayerState } from "../shared/types";
 
 export function allCards(player: PlayerState) {
   return [
@@ -10,10 +10,10 @@ export function allCards(player: PlayerState) {
   ].map(id => Card.get(id));
 };
 
-export function totalTreasure(player: PlayerState) {
+export function totalTreasure(player: PlayerState, game: GameState) {
   return allCards(player)
     .filter(c => c.isType(CardType.Treasure))
-    .map(c => c.onPlay(player).money)
+    .map(c => c.onPlay(player, game).money)
     .reduce((sum, cur) => sum + cur, 0);
 }
 

@@ -6,7 +6,7 @@ Array.prototype.groupBy = function<T, V>(this: T[], cb: (elm: T) => V): T[][] {
     const key = cb(elm);
     map.set(key, map.get(key).concat(elm));
   });
-  return map.values().map(tuple => tuple[1]);
+  return map.entries().map(tuple => tuple[1]);
 }
 
 Array.prototype.match = function<T>(this: T[], elm: T): T[] {

@@ -16,9 +16,9 @@ const simpleCards: Omit<CardProperties, 'setIndex' | 'setName'>[] = [{
   id: BaseSet.Chapel,
   cost: 2,
   types: [CardType.Action],
-  onPlay: player => {
+  onPlay: (player, game) => {
     // only trash while you can still afford a silver
-    const howManyCopperToTrash = totalTreasure(player) - 3;
+    const howManyCopperToTrash = totalTreasure(player, game) - 3;
     return {
       trashFromHand: [
         ...player.hand.match(BasicCards.Curse),
@@ -85,12 +85,11 @@ const simpleCards: Omit<CardProperties, 'setIndex' | 'setName'>[] = [{
   id: BaseSet.Poacher,
   cost: 4,
   types: [CardType.Action],
-  onPlay: () => ({
+  onPlay: (player, game) => ({
     actions: 1,
     draw: 1,
     money: 1,
-    // todo check piles
-    discardAfterDraw: 1,
+    discardAfterDraw: game.supply.values().match(0).length,
   }),
 }, {
   id: BaseSet.Smithy,
