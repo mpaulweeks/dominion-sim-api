@@ -45,3 +45,11 @@ Array.prototype.toCount = function<T>(this: T[]) {
   });
   return map;
 }
+
+Array.prototype.average = function(this: number[]): number {
+  return this.sum() / this.length;
+}
+
+Array.prototype.sum = function(this: number[]): number {
+  return this.reduce((sum, cur) => sum + cur, 0);
+}

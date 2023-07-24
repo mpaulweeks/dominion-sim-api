@@ -9,4 +9,8 @@ declare interface Array<T> {
   shuffle(): T[];
   sortBy<V>(cb: (elm: T) => V): T[];
   toCount(): Map<T, number>;
+
+  // specific
+  average(this: Array<number>): number;
+  sum(this: Array<number>): number;
 }

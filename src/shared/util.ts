@@ -1,7 +1,3 @@
-export function average(arr: number[]): number {
-  return arr.reduce((sum, cur) => sum + cur, 0) / arr.length;
-}
-
 export function range(length: number): number[] {
   const out = [] as number[];
   for (let i = 0; i < length; i++) {
