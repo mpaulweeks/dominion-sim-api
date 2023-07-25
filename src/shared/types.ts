@@ -101,9 +101,28 @@ export type CardProperties = {
 }
 
 // strategy
-export const Infin = '∞';
-export type BuyOrder = [CardID, typeof Infin | number];
+export type BuyOrder = {
+  card: CardID;
+  quantity: number;
+}
 export type Strategy = {
   label: string;
   shoppingList: BuyOrder[];
+}
+
+// sim
+export type Simulation = {
+  decks: DeckSim[];
+}
+export type DeckSim = {
+  label: string;
+  shoppingList: BuyOrder[];
+  summary: {
+    turns: TurnSummary[];
+  };
+};
+export type TurnSummary = {
+  records: number;
+  avgMoney: number;
+  avgVpTotal: number;
 }

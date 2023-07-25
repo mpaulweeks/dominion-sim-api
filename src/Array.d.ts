@@ -13,4 +13,5 @@ declare interface Array<T> {
   // specific
   average(this: Array<number>): number;
   sum(this: Array<number>): number;
+  filterEmpty(this: Array<T | undefined>): T[];
 }

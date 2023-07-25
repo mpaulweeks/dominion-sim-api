@@ -1,6 +1,6 @@
 import { Card } from "../cards";
 import { DefaultMap } from "../shared/DefaultMap";
-import { BasicCards, GameState, PlayerState, Strategy, TurnSnapshot } from "../shared/types";
+import { BasicCards, GameState, PlayerState, Strategy, TurnSnapshot, TurnSummary } from "../shared/types";
 import { range } from "../shared/util";
 import { Player } from "./player";
 
@@ -35,9 +35,13 @@ export function simBuy(count: number, logFirst: boolean, strategy: Strategy) {
 
   return {
     totalTurns: records.map(r => r.state.turnNum).average(),
-    turns: range(Math.max(...records.map(r => r.turns.length))).map(i => ({
-      money: records.map(r => r.turns[i]?.money).filter(n => n !== undefined).average(),
-      vpTotal: records.map(r => r.turns[i]?.vpTotal).filter(n => n !== undefined).average(),
-    })),
+    turns: range(Math.max(...records.map(r => r.turns.length))).map<TurnSummary>(i => {
+      const turnRecords = records.map(r => r.turns[i]).filterEmpty();
+      return {
+        records: turnRecords.length,
+        avgMoney: turnRecords.map(r => r.money).average(),
+        avgVpTotal: turnRecords.map(r => r.vpTotal).average(),
+      };
+    }),
   }
 }

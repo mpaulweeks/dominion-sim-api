@@ -1,6 +1,10 @@
-import { BasicCards, BaseSet, Infin, Strategy } from "../engine";
+import { BasicCards, BaseSet, Strategy, CardID } from "../engine";
 
-export const SampleStrategies: Strategy[] = [{
+const Infin = -1;
+const drafts: {
+  label: string;
+  shoppingList: [CardID, number][];
+}[] = [{
   label: 'BigMoney',
   shoppingList: [
     [BasicCards.Province, Infin ],
@@ -65,3 +69,11 @@ export const SampleStrategies: Strategy[] = [{
     [BasicCards.Silver, Infin ],
   ],
 }];
+
+export const SampleStrategies: Strategy[] = drafts.map(strat => ({
+  label: strat.label,
+  shoppingList: strat.shoppingList.map(tuple => ({
+    card: tuple[0],
+    quantity: tuple[1],
+  })),
+}));

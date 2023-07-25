@@ -1,6 +1,6 @@
 import { DefaultMap } from "../shared/DefaultMap";
 import { Card } from "../cards";
-import { ActiveTurnState, BuyOrder, CardID, GameState, Infin, PlayerState } from "../shared/types";
+import { ActiveTurnState, BuyOrder, CardID, GameState, PlayerState } from "../shared/types";
 
 export class ShoppingList {
   constructor(readonly buyOrders: BuyOrder[]) {}
@@ -10,7 +10,7 @@ export class ShoppingList {
       player.gainHistory.toCount(),
       () => 0,
     );
-    for (const [id, num] of this.buyOrders) {
+    for (const { card: id, quantity } of this.buyOrders) {
       // any in the supply?
       if (game.supply.get(id) === 0) { continue; }
 
@@ -18,7 +18,7 @@ export class ShoppingList {
       const card = Card.get(id);
       if (card.props.cost > turn.money) { continue; }
 
-      const demand = num === Infin ? Infinity : num;
+      const demand = quantity < 0 ? Infinity : quantity;
       if (demand > inventory.get(id)) {
         return id;
       } else {

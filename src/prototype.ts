@@ -53,3 +53,10 @@ Array.prototype.average = function(this: number[]): number {
 Array.prototype.sum = function(this: number[]): number {
   return this.reduce((sum, cur) => sum + cur, 0);
 }
+
+Array.prototype.filterEmpty =  function<T>(this: (T | undefined)[]): T[] {
+  function isNotUndefined(elm: T | undefined): elm is T {
+    return elm !== undefined;
+  }
+  return this.filter(isNotUndefined);
+}

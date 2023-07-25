@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { CardID, Infin, simBuy } from '../engine';
+import { Simulation, Strategy, simBuy } from '../engine';
 import { SampleStrategies } from '../strategy/sample';
 import { Card } from '../cards';
 
@@ -63,20 +63,14 @@ export class WebServer {
     });
 
     app.post('/sim', (req, res) => {
-      const body: {
-        label: string;
-        shoppingList: [string, number][];
-      }[] = req.body;
-      const data = body.map(player => ({
-        label: player.label,
-        stats: simBuy(1000, false, {
+      const body: Strategy[] = req.body;
+      const data: Simulation = {
+        decks: body.map(player => ({
           label: player.label,
-          shoppingList: player.shoppingList.map(tuple => [
-            tuple[0] as CardID,
-            tuple[1] >= 0 ? tuple[1] : Infin,
-          ]),
-        }),
-      }));
+          shoppingList: player.shoppingList,
+          summary: simBuy(1000, false, player),
+        })),
+      };
       res.send(data);
     });
   }
