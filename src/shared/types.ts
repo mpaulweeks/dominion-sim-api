@@ -112,17 +112,34 @@ export type Strategy = {
 
 // sim
 export type Simulation = {
+  games: number;
   decks: DeckSim[];
-}
+};
 export type DeckSim = {
   label: string;
   shoppingList: BuyOrder[];
-  summary: {
-    turns: TurnSummary[];
-  };
+  summary: DeckSummary;
 };
+export type DeckSummary = {
+  outcomes: {
+    win: number;
+    draw: number;
+    lose: number;
+  };
+  turns: TurnSummary[];
+};
+export enum GameOutcome {
+  Win = 1,
+  Lose,
+  Draw,
+}
+export type GameRecord = {
+  outcome: GameOutcome;
+  state: PlayerState;
+  turns: TurnSnapshot[];
+}
 export type TurnSummary = {
   records: number;
   avgMoney: number;
   avgVpTotal: number;
-}
+};

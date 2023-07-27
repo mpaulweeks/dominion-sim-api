@@ -1,5 +1,5 @@
 import '../prototype';
-import { simBuy } from "../engine";
+import { simGames } from "../engine";
 import { SampleStrategies } from "../strategy/sample";
 
 function main() {
@@ -9,6 +9,6 @@ function main() {
   if (!strategy) {
     return console.log('strategy not found:', strategyId);
   }
-  console.log(simBuy(1, true, strategy));
+  console.log(simGames(1, true, [strategy]));
 }
 main();

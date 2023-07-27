@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { Simulation, Strategy, simBuy } from '../engine';
+import { Simulation, Strategy, simGames } from '../engine';
 import { SampleStrategies } from '../strategy/sample';
 import { Card } from '../cards';
 
@@ -54,23 +54,14 @@ export class WebServer {
     });
 
     app.get('/sample', (req, res) => {
-      const data = this.timerWrap(() => SampleStrategies.reduce((obj, strat) => {
-        const { label } = strat;
-        obj[label] = simBuy(1000, false, strat);
-        return obj;
-      }, {} as Record<string, any>));
+      const strategies =  SampleStrategies.slice(0, 3);
+      const data: Simulation = simGames(1000, false, strategies);
       res.send(data);
     });
 
     app.post('/sim', (req, res) => {
-      const body: Strategy[] = req.body;
-      const data: Simulation = {
-        decks: body.map(player => ({
-          label: player.label,
-          shoppingList: player.shoppingList,
-          summary: simBuy(1000, false, player),
-        })),
-      };
+      const strategies: Strategy[] = req.body;
+      const data: Simulation = simGames(1000, false, strategies);
       res.send(data);
     });
   }
