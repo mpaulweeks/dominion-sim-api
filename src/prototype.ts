@@ -46,6 +46,10 @@ Array.prototype.toCount = function<T>(this: T[]) {
   return map;
 }
 
+Array.prototype.getLatest = function<T>(this: T[], index: number): T {
+  return this[Math.min(index, this.length - 1)];
+}
+
 Array.prototype.average = function(this: number[]): number {
   return this.sum() / this.length;
 }

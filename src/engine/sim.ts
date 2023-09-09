@@ -1,6 +1,6 @@
 import { Card } from "../cards";
 import { DefaultMap } from "../shared/DefaultMap";
-import { BasicCards, DeckSim, DeckSummary, GameOutcome, GameRecord, GameState, Simulation, Strategy, TurnSummary } from "../shared/types";
+import { BasicCards, DeckSummary, GameOutcome, GameRecord, GameState, Simulation, Strategy, TurnSummary } from "../shared/types";
 import { range } from "../shared/util";
 import { totalVP } from "./helpers";
 import { Player } from "./player";
@@ -13,7 +13,7 @@ function simGame(strategies: Strategy[], log: boolean, iteration = 0): GameRecor
   const players = strategies.map(s => Player.new(state, s, log));
 
   let index = iteration;
-  while (state.supply.get(BasicCards.Province) > 0) {
+  while (state.supply.get(BasicCards.Province) > 0 && players[0].state.turnNum < 98) {
     players[index % players.length].playTurn();
     index++
   }
@@ -36,7 +36,7 @@ function summarizePlayer(records: GameRecord[]): DeckSummary {
       draw: records.filter(r => r.outcome === GameOutcome.Draw).length,
     },
     turns: range(Math.max(...records.map(r => r.turns.length))).map<TurnSummary>(i => {
-      const turnRecords = records.map(r => r.turns[i]).filterEmpty();
+      const turnRecords = records.map(r => r.turns.getLatest(i));
       return {
         records: turnRecords.length,
         avgMoney: turnRecords.map(r => r.money).average(),
