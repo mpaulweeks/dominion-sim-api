@@ -77,12 +77,8 @@ export class Player {
   playTurn() {
     this.state.turnNum++;
     if (this.log) { console.log(this.state); }
-    if (this.state.turnNum > 99) {
-      console.log(this.state, this.strategy.toString());
-      throw new Error('stuck in loop!');
-    }
 
-    const snapshot = this.turnHistory.next();
+    const snapshot = this.turnHistory.get(this.state.turnNum);
     const turn: ActiveTurnState = {
       actions: 1,
       buys: 1,
@@ -152,7 +148,7 @@ export class Player {
 
   static new(game: GameState, strategy: Strategy, log?: boolean) {
     const p = new Player({
-      turnNum: 0,
+      turnNum: -1,
       deck: [],
       discard: [
         ...repeat(BasicCards.Estate, 3),
