@@ -105,12 +105,16 @@ export type BuyOrder = {
   card: CardID;
   quantity: number;
 }
+
+// sim
 export type Strategy = {
   label: string;
   shoppingList: BuyOrder[];
 }
-
-// sim
+export type SimulationConfig = {
+  games: number;
+  strategies: Strategy[];
+};
 export type Simulation = {
   games: number;
   decks: DeckSim[];

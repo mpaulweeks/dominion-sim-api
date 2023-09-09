@@ -1,8 +1,8 @@
-import express from 'express';
 import cors from 'cors';
-import { Simulation, Strategy, simGames } from '../engine';
-import { SampleStrategies } from '../strategy/sample';
+import express from 'express';
 import { Card } from '../cards';
+import { Simulation, SimulationConfig, simGames } from '../engine';
+import { SampleStrategies } from '../strategy/sample';
 
 export class WebServer {
   readonly app = express();
@@ -54,14 +54,17 @@ export class WebServer {
     });
 
     app.get('/sample', (req, res) => {
-      const strategies =  SampleStrategies.slice(0, 3);
-      const data: Simulation = simGames(1000, false, strategies);
+      const toSim: SimulationConfig = {
+        games: 1000,
+        strategies: SampleStrategies.slice(0, 3),
+      };
+      const data: Simulation = simGames(toSim.games, false, toSim.strategies);
       res.send(data);
     });
 
     app.post('/sim', (req, res) => {
-      const strategies: Strategy[] = req.body;
-      const data: Simulation = simGames(1000, false, strategies);
+      const toSim: SimulationConfig = req.body;
+      const data: Simulation = simGames(toSim.games, false, toSim.strategies);
       res.send(data);
     });
   }
